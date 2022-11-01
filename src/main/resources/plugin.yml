@@ -1,0 +1,6 @@
+name: ModernDatastores
+version: '${project.version}'
+main: dev.betrix.moderndatastores.ModernDatastores
+api-version: 1.19
+authors: [ Betrix ]
+description: A simple solution to handling persistent data storage in your Minecraft server.
