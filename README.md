@@ -3,5 +3,17 @@
 
 This plugin will be used throughout the Modern Plugin Suite to act as a centralized data store, and can be used by other plugins for the same idea.
 
-## Usage: 
+## Usage:
 [TODO]
+
+## TODO:
+- Add support for more storage solutions:
+  - Redis
+  - MongoDB
+  - etc.
+- Expand API with more methods:
+  - Store.remove(key: String)
+  - Store.entries()
+  - Store.values()
+  - Store.keys()
+- Create documentation
