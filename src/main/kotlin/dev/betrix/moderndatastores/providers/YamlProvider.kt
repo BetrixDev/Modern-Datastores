@@ -19,6 +19,10 @@ class YamlProvider : Provider {
     }
 
     override fun <T> getStoreValue(storeName: String, key: String, defaultValue: T?): T? {
+        if (storeName.contains(".")) {
+            throw IllegalArgumentException("storeName should not contain any periods")
+        }
+
         if (defaultValue != null && !isSupportedType(defaultValue)) {
             throw IllegalArgumentException("value must be of type Number, Boolean, String, Map or List")
         }
@@ -38,11 +42,19 @@ class YamlProvider : Provider {
             throw IllegalArgumentException("value must be of type Number, Boolean, String, Map or List")
         }
 
+        if (storeName.contains(".")) {
+            throw IllegalArgumentException("storeName should not contain any periods")
+        }
+
         file.set("$storeName.$key", value)
         writeFile()
     }
 
     override fun setStoreValue(storeName: String, key: String, value: Map<String, Any>) {
+        if (storeName.contains(".")) {
+            throw IllegalArgumentException("storeName should not contain any periods")
+        }
+
         // Using recursion supports nested maps
         fun loopMap(map: Map<String, Any>, pathSuffix: String = "") {
             for (e in map.entries) {
