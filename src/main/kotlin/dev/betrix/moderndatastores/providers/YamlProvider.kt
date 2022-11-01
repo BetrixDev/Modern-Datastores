@@ -1,4 +1,4 @@
-package dev.betrix.moderndatastores.data_providers
+package dev.betrix.moderndatastores.providers
 
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration

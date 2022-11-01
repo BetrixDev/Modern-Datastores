@@ -1,4 +1,4 @@
-package dev.betrix.moderndatastores.data_providers
+package dev.betrix.moderndatastores.providers
 
 interface Provider {
     fun <T> getStoreValue(storeName: String, key: String, defaultValue: T ?= null): T?

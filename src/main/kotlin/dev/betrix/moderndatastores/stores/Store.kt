@@ -1,7 +1,7 @@
 package dev.betrix.moderndatastores.stores
 
 import dev.betrix.moderndatastores.ModernDatastores
-import dev.betrix.moderndatastores.data_providers.Provider
+import dev.betrix.moderndatastores.providers.Provider
 
 /**
  * A wrapper for the key, value stores.

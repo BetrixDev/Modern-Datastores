@@ -1,7 +1,7 @@
 package dev.betrix.moderndatastores
 
-import dev.betrix.moderndatastores.data_providers.Provider
-import dev.betrix.moderndatastores.data_providers.YamlProvider
+import dev.betrix.moderndatastores.providers.Provider
+import dev.betrix.moderndatastores.providers.YamlProvider
 import dev.betrix.moderndatastores.stores.Store
 import org.bukkit.plugin.java.JavaPlugin
 
