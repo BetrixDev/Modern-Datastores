@@ -2,6 +2,7 @@ package dev.betrix.moderndatastores.stores
 
 import dev.betrix.moderndatastores.ModernDatastores
 import dev.betrix.moderndatastores.providers.Provider
+import dev.betrix.moderndatastores.utils.Entry
 
 /**
  * A wrapper for the key, value stores.
@@ -40,10 +41,46 @@ class Store(private val storeName: String, private val provider: Provider, priva
      *
      * @param key Key that will be written to.
      * @param value Value that will be written.
+     * @return the [Store] object to allow for chaining.
      * @since 0.1.0
      */
-    fun set(key: String, value: Any) {
+    fun set(key: String, value: Any): Store {
         plugin.logger.info("Setting $key from store $storeName with a value of [$value]")
         provider.setStoreValue(storeName, key, value)
+
+        return this
+    }
+
+    /**
+     * Retrieve a list of keys in the store.
+     *
+     * @return A string list of keys in the store.
+     * @since 0.1.0
+     */
+    fun keys(): List<String> {
+        plugin.logger.info("Returning all keys in $storeName")
+        return provider.retrieveKeys(storeName)
+    }
+
+    /**
+     * Retrieve a list of values in the store.
+     *
+     * @return A list of values in the store.
+     * @since 0.1.0
+     */
+    fun <T> values(): List<T> {
+        plugin.logger.info("Returning all values in $storeName")
+        return provider.retrieveValues(storeName)
+    }
+
+    /**
+     * Retrieve a list of entries in the store.
+     *
+     * @return A string list of entries in the store using a custom [Entry] data class.
+     * @since 0.1.0
+     */
+    fun <T> entries(): List<Entry<T>> {
+        plugin.logger.info("Returning all entries in $storeName")
+        return provider.retrieveEntries(storeName)
     }
 }

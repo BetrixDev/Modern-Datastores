@@ -1,6 +1,8 @@
 package dev.betrix.moderndatastores.providers
 
+import dev.betrix.moderndatastores.utils.Entry
 import org.bukkit.Bukkit
+import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
@@ -8,7 +10,8 @@ import java.io.File
 class YamlProvider : Provider {
 
     private val file: FileConfiguration
-    private val rawFile: File = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder, "store.yml")
+    private val rawFile: File = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder,
+            "store.yml")
 
     init {
         if (!rawFile.exists()) {
@@ -59,7 +62,8 @@ class YamlProvider : Provider {
         fun loopMap(map: Map<String, Any>, pathSuffix: String = "") {
             for (e in map.entries) {
                 if (!isSupportedType(e.value)) {
-                    throw IllegalArgumentException("values in a Map must be of type Number, Boolean, String, Map or List")
+                    throw IllegalArgumentException(
+                            "values in a Map must be of type Number, Boolean, String, Map or List")
                 }
 
                 if (e.value is Map<*, *>) {
@@ -79,6 +83,21 @@ class YamlProvider : Provider {
 
         loopMap(value)
         writeFile()
+    }
+
+    override fun retrieveKeys(storeName: String): List<String> {
+        val store = file.get(storeName) as MemorySection
+        return store.getKeys(false).toList()
+    }
+
+    override fun <T> retrieveValues(storeName: String): ArrayList<T> {
+        @Suppress("UNCHECKED_CAST")
+        return retrieveKeys(storeName).map { file.get("$storeName.$it") } as ArrayList<T>
+    }
+
+    override fun <T> retrieveEntries(storeName: String): ArrayList<Entry<T>> {
+        @Suppress("UNCHECKED_CAST")
+        return retrieveKeys(storeName).map { Entry<T>(it, file.get("$storeName.$it") as T) } as ArrayList<Entry<T>>
     }
 
     private fun writeFile() {
