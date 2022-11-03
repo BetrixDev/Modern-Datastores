@@ -1,5 +1,6 @@
 package dev.betrix.moderndatastores.providers
 
+import dev.betrix.moderndatastores.ModernDatastores
 import dev.betrix.moderndatastores.utils.Entry
 import org.bukkit.Bukkit
 import org.bukkit.configuration.MemorySection
@@ -7,13 +8,15 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
-class YamlProvider : Provider {
+class YamlProvider(plugin: ModernDatastores) : Provider {
 
     private val file: FileConfiguration
-    private val rawFile: File = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder,
-            "store.yml")
+    private val rawFile: File
 
     init {
+        val fileName = plugin.config.getString("yaml_options.db_name")!!
+        rawFile = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder, "$fileName.yaml")
+
         if (!rawFile.exists()) {
             rawFile.createNewFile()
         }

@@ -1,0 +1,10 @@
+# Modern Datastores
+
+# What database solution to use
+# Possible options:
+# - "YAML": The easiest solution. Stored in '/plugins/ModernDatastores/'. Certain operations may be slower than other solutions.
+storage_solution: "YAML"
+
+yaml_options:
+  # Name of the file for the database in '/plugins/ModernDatastores/[db_name].yml'
+  db_name: "database" # Don't include '.yml', stick to alphanumerics.

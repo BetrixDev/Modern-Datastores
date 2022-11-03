@@ -28,7 +28,19 @@ class ModernDatastores : JavaPlugin() {
         saveDefaultConfig()
 
         instance = this
-        provider = YamlProvider()
+
+        when (val solution = config.getString("storage_solution")) {
+            "YAML" -> provider = YamlProvider(this)
+            else -> {
+                logger.severe("Unknown storage solution \"$solution\" in config, disabling")
+                server.pluginManager.disablePlugin(this)
+            }
+        }
+
+        getStore("bools").set("123", true)
+        logger.info("${getStore("bools").keys()}")
+        getStore("bools").set("8761", true)
+        logger.info("${getStore("bools").keys()}")
 
         logger.info("Modern Datastores Initialized")
     }
