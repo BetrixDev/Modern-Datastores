@@ -36,12 +36,7 @@ class ModernDatastores : JavaPlugin() {
                 server.pluginManager.disablePlugin(this)
             }
         }
-
-        getStore("bools").set("123", true)
-        logger.info("${getStore("bools").keys()}")
-        getStore("bools").set("8761", true)
-        logger.info("${getStore("bools").keys()}")
-
+        
         logger.info("Modern Datastores Initialized")
     }
 }
