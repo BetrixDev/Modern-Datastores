@@ -3,12 +3,13 @@ package dev.betrix.moderndatastores.providers
 import dev.betrix.moderndatastores.ModernDatastores
 import dev.betrix.moderndatastores.utils.Entry
 import org.bukkit.Bukkit
+import org.bukkit.configuration.MemoryConfiguration
 import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
-class YamlProvider(plugin: ModernDatastores) : Provider {
+class YamlProvider(private val plugin: ModernDatastores) : Provider {
 
     private val file: FileConfiguration
     private val rawFile: File
@@ -34,8 +35,32 @@ class YamlProvider(plugin: ModernDatastores) : Provider {
         }
 
         if (file.contains("$storeName.$key")) {
-            @Suppress("UNCHECKED_CAST")
-            return file.get("$storeName.$key", defaultValue) as T
+            val value = file.get("$storeName.$key", defaultValue)
+
+            if (value is MemorySection) {
+                val mappedValue = HashMap<String, Any>()
+
+                fun createMap(mem: MemorySection) {
+                    for (memKey in mem.getKeys(false)) {
+                        val memValue = mem.get(memKey)!!
+
+                        if (memValue is MemoryConfiguration) {
+                            createMap(memValue)
+                        } else {
+                            mappedValue[memKey] = memValue
+                        }
+                    }
+                }
+
+                createMap(value)
+
+                @Suppress("UNCHECKED_CAST")
+                return mappedValue as T
+            } else {
+                @Suppress("UNCHECKED_CAST")
+                return value as T
+            }
+
         } else if (defaultValue != null) {
             return defaultValue
         } else {
