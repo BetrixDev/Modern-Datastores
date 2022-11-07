@@ -128,6 +128,10 @@ class YamlProvider(private val plugin: ModernDatastores) : Provider {
         return retrieveKeys(storeName).map { Entry<T>(it, file.get("$storeName.$it") as T) } as ArrayList<Entry<T>>
     }
 
+    override fun checkStoreExists(storeName: String): Boolean {
+        return file.contains(storeName)
+    }
+
     private fun writeFile() {
         rawFile.writeText(file.saveToString())
     }

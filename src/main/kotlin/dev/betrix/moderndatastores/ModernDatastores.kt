@@ -3,6 +3,7 @@ package dev.betrix.moderndatastores
 import dev.betrix.moderndatastores.providers.Provider
 import dev.betrix.moderndatastores.providers.YamlProvider
 import dev.betrix.moderndatastores.stores.Store
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class ModernDatastores : JavaPlugin() {
@@ -22,6 +23,11 @@ class ModernDatastores : JavaPlugin() {
         fun getStore(storeName: String): Store {
             return Store(storeName, provider, instance)
         }
+
+        @JvmStatic
+        fun storeExists(storeName: String): Boolean {
+            return provider.checkStoreExists(storeName)
+        }
     }
 
     override fun onEnable() {
@@ -36,7 +42,12 @@ class ModernDatastores : JavaPlugin() {
                 server.pluginManager.disablePlugin(this)
             }
         }
-        
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            logger.info("PlaceholderAPI detected, Registering expansion")
+            ModernDatastoresExpansion().register()
+        }
+
         logger.info("Modern Datastores Initialized")
     }
 }
