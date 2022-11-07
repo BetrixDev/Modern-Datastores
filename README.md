@@ -1,19 +1,20 @@
 # Modern Data Stores
+
 #### A simple solution to handling persistent data storage in your Minecraft server.
 
-This plugin will be used throughout the Modern Plugin Suite to act as a centralized data store, and can be used by other plugins for the same idea.
+This plugin will be used throughout the Modern Plugin Suite to act as a centralized data store, and can be used by other
+plugins for the same idea.
 
 ## Usage:
+
 [TODO]
 
 ## TODO:
+
 - Add support for more storage solutions:
-  - Redis
-  - MongoDB
-  - etc.
+    - Redis
+    - MongoDB
+    - etc.
 - Expand API with more methods:
-  - Store.remove(key: String)
-  - Store.entries()
-  - Store.values()
-  - Store.keys()
+    - Store.remove(key: String)
 - Create documentation
