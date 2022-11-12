@@ -3,7 +3,7 @@ package dev.betrix.moderndatastores
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
 
-class ModernDatastoresExpansion : PlaceholderExpansion() {
+class ModernDatastoresExpansion(private val datastores: ModernDatastores) : PlaceholderExpansion() {
     override fun getIdentifier(): String {
         return "md"
     }
@@ -23,11 +23,11 @@ class ModernDatastoresExpansion : PlaceholderExpansion() {
 
         val params = paramString.split(".")
 
-        if (!ModernDatastores.storeExists(params[0])) {
+        if (!ModernDatastores.registry.registeredStores.containsKey(params[0])) {
             return "INVALID STORE NAME"
         }
 
-        val store = ModernDatastores.getStore(params[0])
+        val store = ModernDatastores.getStore(datastores, params[0])
         val value = store.get<Any>(params[1], true)
 
         if (value is Map<*, *>) {

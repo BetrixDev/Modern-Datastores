@@ -8,8 +8,8 @@ interface Provider {
     fun setStoreValue(storeName: String, key: String, value: Map<String, Any>)
     fun retrieveKeys(storeName: String): List<String>
     fun <T> retrieveValues(storeName: String): ArrayList<T>
-    fun <T> retrieveEntries(storeName: String): ArrayList<Entry<T>>
-    fun checkStoreExists(storeName: String): Boolean
+    fun <T> retrieveEntries(storeName: String): List<Entry<T>>
+    fun checkStoreExists(storeName: String): Boolean // TODO: Add this function to MongoProvider
 
     fun isSupportedType(value: Any): Boolean {
         return value is Boolean || value is Number || value is String || value is Map<*, *> || value is List<*>

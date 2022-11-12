@@ -1,6 +1,5 @@
 package dev.betrix.moderndatastores.providers
 
-import dev.betrix.moderndatastores.ModernDatastores
 import dev.betrix.moderndatastores.utils.Entry
 import org.bukkit.Bukkit
 import org.bukkit.configuration.MemoryConfiguration
@@ -9,14 +8,14 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
-class YamlProvider(private val plugin: ModernDatastores) : Provider {
+class YamlProvider(databaseName: String) : Provider {
 
     private val file: FileConfiguration
     private val rawFile: File
 
     init {
-        val fileName = plugin.config.getString("yaml_options.db_name")!!
-        rawFile = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder, "$fileName.yaml")
+        rawFile = File(Bukkit.getServer().pluginManager.getPlugin("ModernDatastores")!!.dataFolder,
+                "$databaseName.yaml")
 
         if (!rawFile.exists()) {
             rawFile.createNewFile()
@@ -123,9 +122,9 @@ class YamlProvider(private val plugin: ModernDatastores) : Provider {
         return retrieveKeys(storeName).map { file.get("$storeName.$it") } as ArrayList<T>
     }
 
-    override fun <T> retrieveEntries(storeName: String): ArrayList<Entry<T>> {
+    override fun <T> retrieveEntries(storeName: String): List<Entry<T>> {
         @Suppress("UNCHECKED_CAST")
-        return retrieveKeys(storeName).map { Entry<T>(it, file.get("$storeName.$it") as T) } as ArrayList<Entry<T>>
+        return retrieveKeys(storeName).map { Entry(it, file.get("$storeName.$it")!! as T) }
     }
 
     override fun checkStoreExists(storeName: String): Boolean {
