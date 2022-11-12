@@ -9,7 +9,7 @@ class ModernDatastores : JavaPlugin() {
 
     companion object {
         private lateinit var instance: ModernDatastores
-        private lateinit var registry: ModernDatastoresRegistry
+        lateinit var registry: ModernDatastoresRegistry
 
         /**
          * Retrieve the key/value store under the specified name.
@@ -34,11 +34,6 @@ class ModernDatastores : JavaPlugin() {
         fun registerStores(plugin: JavaPlugin, stores: List<DataStore>) {
             registry.appendRegistry(plugin, stores)
         }
-
-        @JvmStatic
-        fun storeExists(storeName: String): Boolean {
-            return provider.checkStoreExists(storeName)
-        }
     }
 
     override fun onEnable() {
@@ -46,6 +41,11 @@ class ModernDatastores : JavaPlugin() {
 
         instance = this
         registry = ModernDatastoresRegistry(this)
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            logger.info("PlaceholderAPI detected, Registering expansion")
+            ModernDatastoresExpansion(this).register()
+        }
 
         logger.info("Modern Datastores Initialized")
     }
