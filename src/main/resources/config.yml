@@ -3,8 +3,18 @@
 # What database solution to use
 # Possible options:
 # - "YAML": The easiest solution. Stored in '/plugins/ModernDatastores/'. Certain operations may be slower than other solutions.
+# - "MONGO": MongoDB (https://www.mongodb.com/docs/manual/tutorial/)
 storage_solution: "YAML"
 
 yaml_options:
   # Name of the file for the database in '/plugins/ModernDatastores/[db_name].yml'
   db_name: "database" # Don't include '.yml', stick to alphanumerics.
+
+mongo_options:
+  # Connection URI for the database
+  uri: "mongodb://localhost:27017"
+  # Name of the database to use inside Mongo, Make sure it already exists in your database
+  database_name: "MinecraftServer"
+
+# TODO: create docs section on how to use this
+custom_store_providers:

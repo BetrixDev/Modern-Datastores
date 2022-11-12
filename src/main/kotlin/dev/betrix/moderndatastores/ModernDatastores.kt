@@ -1,26 +1,37 @@
 package dev.betrix.moderndatastores
 
-import dev.betrix.moderndatastores.providers.Provider
-import dev.betrix.moderndatastores.providers.YamlProvider
 import dev.betrix.moderndatastores.stores.Store
+import dev.betrix.moderndatastores.utils.DataStore
 import org.bukkit.plugin.java.JavaPlugin
 
 class ModernDatastores : JavaPlugin() {
 
     companion object {
         private lateinit var instance: ModernDatastores
-        private lateinit var provider: Provider // Eventually there will be more data providers
+        private lateinit var registry: ModernDatastoresRegistry
 
         /**
-         * Retrieve the key, value store under the specified name.
+         * Retrieve the key/value store under the specified name.
          *
          * @param storeName Name of the store to retrieve.
-         * @return The associated [Store] object. **If the store doesn't exist, it will be created.**
+         * @return The associated [Store] object.
          * @since 0.1.0
          */
         @JvmStatic
-        fun getStore(storeName: String): Store {
-            return Store(storeName, provider, instance)
+        fun getStore(plugin: JavaPlugin, storeName: String): Store {
+            return Store(plugin, storeName, instance, registry)
+        }
+
+        /**
+         * Register all stores you plan to use within your plugin.
+         *
+         * @param plugin Your plugin's main class.
+         * @param stores A list of [DataStore]s containing the name of usage description for each store you are using.
+         * @since 0.1.0
+         */
+        @JvmStatic
+        fun registerStores(plugin: JavaPlugin, stores: List<DataStore>) {
+            registry.appendRegistry(plugin, stores)
         }
     }
 
@@ -28,19 +39,7 @@ class ModernDatastores : JavaPlugin() {
         saveDefaultConfig()
 
         instance = this
-
-        when (val solution = config.getString("storage_solution")) {
-            "YAML" -> provider = YamlProvider(this)
-            else -> {
-                logger.severe("Unknown storage solution \"$solution\" in config, disabling")
-                server.pluginManager.disablePlugin(this)
-            }
-        }
-
-        getStore("bools").set("123", true)
-        logger.info("${getStore("bools").keys()}")
-        getStore("bools").set("8761", true)
-        logger.info("${getStore("bools").keys()}")
+        registry = ModernDatastoresRegistry(this)
 
         logger.info("Modern Datastores Initialized")
     }

@@ -1,14 +1,43 @@
 package dev.betrix.moderndatastores.stores
 
 import dev.betrix.moderndatastores.ModernDatastores
+import dev.betrix.moderndatastores.ModernDatastoresRegistry
 import dev.betrix.moderndatastores.providers.Provider
 import dev.betrix.moderndatastores.utils.Entry
+import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * A wrapper for the key, value stores.
  * Use [get] to retrieve values, and [set] to set them.
  */
-class Store(private val storeName: String, private val provider: Provider, private val plugin: ModernDatastores) {
+class Store(plugin: JavaPlugin, store: String, private val datastores: ModernDatastores, registry: ModernDatastoresRegistry) {
+
+    // Prefix store name with the plugin name so different plugins can use the same store names without overlaps
+    private val storeName = "${plugin.name}$store"
+    private val provider: Provider
+
+    init {
+        if (!isValidStoreName(store)) {
+            throw IllegalArgumentException("Store name must only contain letters and numbers.")
+        }
+
+        if (!registry.isStoreRegistered(store, plugin)) {
+            throw IllegalStateException("You must register a store before using it.")
+        }
+
+        val customProvider = datastores.config.getString("custom_store_providers.${plugin.name}.${store}")
+
+        provider = if (customProvider == null) {
+            registry.defaultProvider
+        } else {
+            registry.registeredProviders[customProvider]!!
+        }
+    }
+
+    private fun isValidStoreName(name: String): Boolean {
+        if (name.isEmpty()) return false
+        return name.all { it.isLetter() || it.isDigit() }
+    }
 
     /**
      * Retrieve the value under the given key.
@@ -20,7 +49,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun <T> get(key: String, defaultValue: T): T {
-        plugin.logger.info("Accessing $key from store $storeName, with a default value of $defaultValue")
+        datastores.logger.info("Accessing $key from store $storeName, with a default value of $defaultValue")
         return provider.getStoreValue(storeName, key, defaultValue)!!
     }
 
@@ -32,7 +61,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun <T> get(key: String): T? {
-        plugin.logger.info("Accessing $key from store $storeName")
+        datastores.logger.info("Accessing $key from store $storeName")
         return provider.getStoreValue<T>(storeName, key)
     }
 
@@ -45,7 +74,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun set(key: String, value: Any): Store {
-        plugin.logger.info("Setting $key from store $storeName with a value of [$value]")
+        datastores.logger.info("Setting $key from store $storeName with a value of [$value]")
         provider.setStoreValue(storeName, key, value)
 
         return this
@@ -58,7 +87,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun keys(): List<String> {
-        plugin.logger.info("Returning all keys in $storeName")
+        datastores.logger.info("Returning all keys in $storeName")
         return provider.retrieveKeys(storeName)
     }
 
@@ -69,7 +98,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun <T> values(): List<T> {
-        plugin.logger.info("Returning all values in $storeName")
+        datastores.logger.info("Returning all values in $storeName")
         return provider.retrieveValues(storeName)
     }
 
@@ -80,7 +109,7 @@ class Store(private val storeName: String, private val provider: Provider, priva
      * @since 0.1.0
      */
     fun <T> entries(): List<Entry<T>> {
-        plugin.logger.info("Returning all entries in $storeName")
+        datastores.logger.info("Returning all entries in $storeName")
         return provider.retrieveEntries(storeName)
     }
 }
