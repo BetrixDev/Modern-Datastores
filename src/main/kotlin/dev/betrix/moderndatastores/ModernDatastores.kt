@@ -2,6 +2,7 @@ package dev.betrix.moderndatastores
 
 import dev.betrix.moderndatastores.stores.Store
 import dev.betrix.moderndatastores.utils.DataStore
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class ModernDatastores : JavaPlugin() {
@@ -32,6 +33,11 @@ class ModernDatastores : JavaPlugin() {
         @JvmStatic
         fun registerStores(plugin: JavaPlugin, stores: List<DataStore>) {
             registry.appendRegistry(plugin, stores)
+        }
+
+        @JvmStatic
+        fun storeExists(storeName: String): Boolean {
+            return provider.checkStoreExists(storeName)
         }
     }
 

@@ -2,6 +2,7 @@ package dev.betrix.moderndatastores.providers
 
 import dev.betrix.moderndatastores.utils.Entry
 import org.bukkit.Bukkit
+import org.bukkit.configuration.MemoryConfiguration
 import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -33,8 +34,32 @@ class YamlProvider(databaseName: String) : Provider {
         }
 
         if (file.contains("$storeName.$key")) {
-            @Suppress("UNCHECKED_CAST")
-            return file.get("$storeName.$key", defaultValue) as T
+            val value = file.get("$storeName.$key", defaultValue)
+
+            if (value is MemorySection) {
+                val mappedValue = HashMap<String, Any>()
+
+                fun createMap(mem: MemorySection) {
+                    for (memKey in mem.getKeys(false)) {
+                        val memValue = mem.get(memKey)!!
+
+                        if (memValue is MemoryConfiguration) {
+                            createMap(memValue)
+                        } else {
+                            mappedValue[memKey] = memValue
+                        }
+                    }
+                }
+
+                createMap(value)
+
+                @Suppress("UNCHECKED_CAST")
+                return mappedValue as T
+            } else {
+                @Suppress("UNCHECKED_CAST")
+                return value as T
+            }
+
         } else if (defaultValue != null) {
             return defaultValue
         } else {
@@ -100,6 +125,10 @@ class YamlProvider(databaseName: String) : Provider {
     override fun <T> retrieveEntries(storeName: String): List<Entry<T>> {
         @Suppress("UNCHECKED_CAST")
         return retrieveKeys(storeName).map { Entry(it, file.get("$storeName.$it")!! as T) }
+    }
+
+    override fun checkStoreExists(storeName: String): Boolean {
+        return file.contains(storeName)
     }
 
     private fun writeFile() {
