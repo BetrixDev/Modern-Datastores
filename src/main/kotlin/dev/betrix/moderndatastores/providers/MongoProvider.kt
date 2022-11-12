@@ -73,4 +73,8 @@ class MongoProvider(private val datastores: ModernDatastores) : Provider {
         @Suppress("UNCHECKED_CAST")
         return collection.find().map { Entry<T>(it["_id"]!! as String, it["value"]!! as T) }.toList()
     }
+
+    override fun checkStoreExists(storeName: String): Boolean {
+        return database.listCollectionNames().contains(storeName)
+    }
 }
