@@ -76,4 +76,11 @@ class MongoProvider(private val datastores: ModernDatastores) : Provider {
     override fun checkStoreExists(storeName: String): Boolean {
         return database.listCollectionNames().contains(storeName)
     }
+
+    override fun removeEntry(storeName: String, key: String) {
+        val collection = database.getCollection(storeName)
+        val doc = Document("_id", key)
+
+        collection.findOneAndDelete(doc)
+    }
 }

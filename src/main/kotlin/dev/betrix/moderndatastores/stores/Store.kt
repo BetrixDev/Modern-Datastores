@@ -112,4 +112,15 @@ class Store(plugin: JavaPlugin, store: String, private val datastores: ModernDat
         datastores.logger.info("Returning all entries in $storeName")
         return provider.retrieveEntries(storeName)
     }
+
+    /**
+     * Remove the specified key/value pair from a [Store]
+     *
+     * @param key The key for the pair to remove.
+     * @since 0.1.0
+     */
+    fun remove(key: String) {
+        datastores.logger.info("Removing $key from $storeName")
+        provider.removeEntry(storeName, key)
+    }
 }

@@ -131,6 +131,11 @@ class YamlProvider(databaseName: String) : Provider {
         return file.contains(storeName)
     }
 
+    override fun removeEntry(storeName: String, key: String) {
+        file.set("$storeName.$key", null)
+        writeFile()
+    }
+
     private fun writeFile() {
         rawFile.writeText(file.saveToString())
     }
