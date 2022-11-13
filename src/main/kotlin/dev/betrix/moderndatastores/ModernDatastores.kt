@@ -60,8 +60,6 @@ class ModernDatastores : JavaPlugin() {
             ModernDatastoresExpansion(this).register()
         }
 
-        registerStores(this, listOf(DataStore("Hello", "this is a test")))
-
         initCommands()
 
         logger.info("Modern Datastores Initialized")
