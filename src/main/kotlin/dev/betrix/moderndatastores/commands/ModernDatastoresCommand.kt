@@ -46,7 +46,6 @@ class ModernDatastoresCommand(private val datastores: ModernDatastores) : Comman
                                 " <gold>Below is a list of all stores used in <yellow>${args[0]}</yellow>.</gold>\n\n")))
 
                 for (store in stores.values) {
-                    datastores.logger.info("$store")
                     message.append(MiniMessage.miniMessage().deserialize(
                             " <dark_gray>- <dark_aqua>[<aqua>${store.name}</aqua>]</dark_aqua><dark_gray>: <yellow>${store.description}\n"))
                 }

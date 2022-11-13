@@ -17,7 +17,6 @@ class MongoProvider(private val datastores: ModernDatastores) : Provider {
     init {
         try {
             mongoClient = MongoClients.create(datastores.config.getString("mongo_options.uri")!!)
-            datastores.logger.info("Databases: ${mongoClient.listDatabaseNames().first()}")
             database = mongoClient.getDatabase(datastores.config.getString("mongo_options.database_name")!!)
         } catch (_: UnknownHostException) {
             throw UnknownHostException("Unable to connect to MongoDB")
