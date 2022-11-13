@@ -6,3 +6,9 @@ authors: [ Betrix ]
 description: A simple solution to handling persistent data storage in your Minecraft server.
 softdepend:
   - PlaceholderAPI
+commands:
+  moderndatastores:
+    description: Utility command for interacting with ModernDatastores
+    aliases:
+      - md
+    permission: moderndatastores.command

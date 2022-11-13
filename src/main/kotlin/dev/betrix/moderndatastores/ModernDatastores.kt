@@ -1,7 +1,10 @@
 package dev.betrix.moderndatastores
 
+import dev.betrix.moderndatastores.commands.ModernDatastoresCommand
 import dev.betrix.moderndatastores.stores.Store
 import dev.betrix.moderndatastores.utils.DataStore
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -36,6 +39,16 @@ class ModernDatastores : JavaPlugin() {
         }
     }
 
+    val prefix: Component
+        get() {
+            val unformatted = config.getString("prefix")!!
+            return MiniMessage.miniMessage().deserialize(unformatted)
+        }
+
+    private fun initCommands() {
+        getCommand("moderndatastores")?.setExecutor(ModernDatastoresCommand(this))
+    }
+
     override fun onEnable() {
         saveDefaultConfig()
 
@@ -46,6 +59,10 @@ class ModernDatastores : JavaPlugin() {
             logger.info("PlaceholderAPI detected, Registering expansion")
             ModernDatastoresExpansion(this).register()
         }
+
+        registerStores(this, listOf(DataStore("Hello", "this is a test")))
+
+        initCommands()
 
         logger.info("Modern Datastores Initialized")
     }

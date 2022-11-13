@@ -1,5 +1,8 @@
 # Modern Datastores
 
+# Prefix that is shown before messages
+prefix: "<dark_gray>[<gradient:#29a9ff:#82cdff>Modern</gradient> <gradient:#82cdff:#29a9ff>Datastores</gradient>]"
+
 # What database solution to use
 # Possible options:
 # - "YAML": The easiest solution. Stored in '/plugins/ModernDatastores/'. Certain operations may be slower than other solutions.
