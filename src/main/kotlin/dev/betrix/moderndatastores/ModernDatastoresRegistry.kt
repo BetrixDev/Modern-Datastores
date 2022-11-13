@@ -20,23 +20,21 @@ class ModernDatastoresRegistry(private val datastores: ModernDatastores) {
         defaultProvider = provider
         registeredProviders[defaultSolution] = provider
 
-        val customProviderList = datastores.config.get("custom_store_providers") as MemorySection
+        val customProviderList = datastores.config.get("custom_store_providers")
 
-        datastores.logger.info("${customProviderList.getKeys(false)}")
+        if (customProviderList is MemorySection) {
+            for (pluginName in customProviderList.getKeys(false)) {
+                val customPluginProviders = customProviderList.get(pluginName) as MemorySection
 
-        for (pluginName in customProviderList.getKeys(false)) {
-            val customPluginProviders = customProviderList.get(pluginName) as MemorySection
+                for (key in customPluginProviders.getKeys(false)) {
+                    val value = customPluginProviders.get(key) as String
 
-            for (key in customPluginProviders.getKeys(false)) {
-                val value = customPluginProviders.get(key) as String
-
-                if (!registeredProviders.containsKey(value)) {
-                    registeredProviders[value] = getProvider(value)
+                    if (!registeredProviders.containsKey(value)) {
+                        registeredProviders[value] = getProvider(value)
+                    }
                 }
             }
         }
-
-        datastores.logger.info("$registeredProviders")
     }
 
     private fun getProvider(name: String): Provider {
