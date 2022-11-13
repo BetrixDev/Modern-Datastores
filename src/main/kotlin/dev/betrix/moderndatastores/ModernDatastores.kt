@@ -6,6 +6,7 @@ import dev.betrix.moderndatastores.utils.DataStore
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 
 class ModernDatastores : JavaPlugin() {
@@ -22,7 +23,7 @@ class ModernDatastores : JavaPlugin() {
          * @since 0.1.0
          */
         @JvmStatic
-        fun getStore(plugin: JavaPlugin, storeName: String): Store {
+        fun getStore(plugin: Plugin, storeName: String): Store {
             return Store(plugin, storeName, instance, registry)
         }
 

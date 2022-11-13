@@ -5,6 +5,7 @@ import dev.betrix.moderndatastores.providers.Provider
 import dev.betrix.moderndatastores.providers.YamlProvider
 import dev.betrix.moderndatastores.utils.DataStore
 import org.bukkit.configuration.MemorySection
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 
 class ModernDatastoresRegistry(private val datastores: ModernDatastores) {
@@ -63,7 +64,7 @@ class ModernDatastoresRegistry(private val datastores: ModernDatastores) {
         registeredStores[plugin.name] = mappedStores
     }
 
-    fun isStoreRegistered(storeName: String, plugin: JavaPlugin): Boolean {
+    fun isStoreRegistered(storeName: String, plugin: Plugin): Boolean {
         val stores = registeredStores[plugin.name] ?: return false
         return stores.containsKey(storeName)
     }

@@ -4,13 +4,13 @@ import dev.betrix.moderndatastores.ModernDatastores
 import dev.betrix.moderndatastores.ModernDatastoresRegistry
 import dev.betrix.moderndatastores.providers.Provider
 import dev.betrix.moderndatastores.utils.Entry
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 
 /**
  * A wrapper for the key, value stores.
  * Use [get] to retrieve values, and [set] to set them.
  */
-class Store(plugin: JavaPlugin, store: String, private val datastores: ModernDatastores, registry: ModernDatastoresRegistry) {
+class Store(plugin: Plugin, store: String, private val datastores: ModernDatastores, registry: ModernDatastoresRegistry) {
 
     // Prefix store name with the plugin name so different plugins can use the same store names without overlaps
     private val storeName = "${plugin.name}$store"
