@@ -64,6 +64,7 @@ class ModernDatastoresRegistry(private val datastores: ModernDatastores) {
     }
 
     fun isStoreRegistered(storeName: String, plugin: JavaPlugin): Boolean {
-        return registeredStores.containsKey("${plugin.name}$storeName")
+        val stores = registeredStores[plugin.name] ?: return false
+        return stores.containsKey(storeName)
     }
 }
