@@ -15,6 +15,4 @@ plugins for the same idea.
     - Redis
     - MongoDB
     - etc.
-- Expand API with more methods:
-    - Store.remove(key: String)
 - Create documentation
